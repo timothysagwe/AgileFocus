@@ -3,7 +3,6 @@
   import './styles/global.css';
   import { getPath, onPathChange } from './lib/router.js';
   import Navigation from './lib/components/Navigation.svelte';
-  import Index from './routes/index.svelte';
   import Learn from './routes/learn/index.svelte';
   import BpmnHub from './routes/bpmn/index.svelte';
   import BpmnExercise from './routes/bpmn/exercise.svelte';
