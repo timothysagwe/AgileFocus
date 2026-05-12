@@ -21,12 +21,21 @@
   import Topic6 from './routes/learn/governance/topic-6.svelte';
   import Certs from './routes/learn/certifications.svelte';
   import CertQuiz from './routes/learn/quiz/cert-quiz.svelte';
+  import ProjectDashboard from './routes/project/index.svelte';
+  import ProjectInitiation from './routes/project/initiation.svelte';
+  import ProjectPlanning from './routes/project/planning.svelte';
+  import ProjectProcessModelling from './routes/project/process-modelling.svelte';
+  import ProjectDelivery from './routes/project/delivery.svelte';
+  import ProjectGovernance from './routes/project/governance.svelte';
+  import ProjectAudit from './routes/project/audit.svelte';
+  import ProjectRetrospective from './routes/project/retrospective.svelte';
 
   let page = 'index';
   let exerciseId = '';
   let simulationId = '';
   let govTopic = '';
   let certId = '';
+  let projectPhaseId = '';
 
   const routeMap = [
     { pattern: /^\/$/, name: 'index' },
@@ -41,7 +50,9 @@
     { pattern: /^\/learn\/governance\/topic-(\d+)$/, name: 'governance-topic' },
     { pattern: /^\/learn\/governance$/, name: 'governance-hub' },
     { pattern: /^\/learn\/certifications$/, name: 'certifications' },
-    { pattern: /^\/learn\/quiz\/(.+)$/, name: 'cert-quiz' }
+    { pattern: /^\/learn\/quiz\/(.+)$/, name: 'cert-quiz' },
+    { pattern: /^\/project$/, name: 'project-dashboard' },
+    { pattern: /^\/project\/(.+)$/, name: 'project-phase' }
   ];
 
   function resolveRoute(pathname) {
@@ -59,6 +70,9 @@
         }
         if (route.name === 'cert-quiz') {
           certId = match[1];
+        }
+        if (route.name === 'project-phase') {
+          projectPhaseId = match[1];
         }
         return route.name;
       }
@@ -117,6 +131,26 @@
     <Certs />
   {:else if page === 'cert-quiz'}
     <CertQuiz certId={certId} />
+  {:else if page === 'project-dashboard'}
+    <ProjectDashboard />
+  {:else if page === 'project-phase'}
+    {#if projectPhaseId === 'initiation'}
+      <ProjectInitiation />
+    {:else if projectPhaseId === 'planning'}
+      <ProjectPlanning />
+    {:else if projectPhaseId === 'process-modelling'}
+      <ProjectProcessModelling />
+    {:else if projectPhaseId === 'delivery'}
+      <ProjectDelivery />
+    {:else if projectPhaseId === 'governance'}
+      <ProjectGovernance />
+    {:else if projectPhaseId === 'audit'}
+      <ProjectAudit />
+    {:else if projectPhaseId === 'retrospective'}
+      <ProjectRetrospective />
+    {:else}
+      <ProjectDashboard />
+    {/if}
   {:else if page === 'settings'}
     <Settings />
   {:else}

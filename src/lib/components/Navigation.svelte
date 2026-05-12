@@ -1,18 +1,12 @@
 <script>
   import { progress } from '../stores/progress.js';
   import { getPath, navigate } from '../router.js';
+  import { project } from '../stores/project.js';
+  import { getPhaseLabel } from '../engines/lifecycle-engine.js';
   import Badge from './Badge.svelte';
   import BYOKIndicator from './BYOKIndicator.svelte';
 
   let mobileOpen = false;
-
-  const links = [
-    { href: '/learn', label: 'Learn' },
-    { href: '/bpmn', label: 'BPMN' },
-    { href: '/simulator', label: 'Simulator' },
-    { href: '/personas', label: 'Personas' },
-    { href: '/settings', label: 'Settings' }
-  ];
 
   function navTo(href) {
     navigate(href);
@@ -20,6 +14,25 @@
   }
 
   $: currentPath = typeof window !== 'undefined' ? getPath() : '/';
+  $: p = $project;
+  $: currentPhaseLabel = p?.started && p?.current_phase && getPhaseLabel(p.current_phase)?.title;
+  $: currentPhaseHref = p?.started ? `/project/${p.current_phase}` : '/project';
+  $: links = buildLinks(p);
+
+  function buildLinks(proj) {
+    const items = [];
+    if (proj?.started && !proj?.is_complete) {
+      items.push({ href: '/project', label: 'Dashboard' });
+      items.push({ href: `/project/${proj.current_phase}`, label: `Phase: ${getPhaseLabel(proj.current_phase).title}` });
+    } else if (proj?.is_complete) {
+      items.push({ href: '/project/retrospective', label: 'Portfolio' });
+    } else {
+      items.push({ href: '/project', label: 'Start Project' });
+    }
+    items.push({ href: '/personas', label: 'Team' });
+    items.push({ href: '/settings', label: 'Settings' });
+    return items;
+  }
 </script>
 
 <nav class="nav" aria-label="Main navigation">
