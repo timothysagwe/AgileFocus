@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="Process_1" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_Claimant" name="Claimant">
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SubmitClaim</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_CaseWorker" name="Case Worker">
+        <bpmn:flowNodeRef>Task_VerifyClaim</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Eligibility</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_System" name="System">
+        <bpmn:flowNodeRef>Task_RecordDecision</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_NotifyClaimant</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_1</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="StartEvent_1" name="Claim Submitted">
+      <bpmn:outgoing>Flow_SubmitToVerify</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_SubmitClaim" name="Submit Claim">
+      <bpmn:incoming>Flow_SubmitToVerify</bpmn:incoming>
+      <bpmn:outgoing>Flow_VerifyToEligibility</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_VerifyClaim" name="Verify Claim Details">
+      <bpmn:incoming>Flow_VerifyToEligibility</bpmn:incoming>
+      <bpmn:outgoing>Flow_EligibilityDecision</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="Gateway_Eligibility" name="Eligible?" default="Flow_RejectPath">
+      <bpmn:incoming>Flow_EligibilityDecision</bpmn:incoming>
+      <bpmn:outgoing>Flow_Approved</bpmn:outgoing>
+      <bpmn:outgoing>Flow_RejectPath</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_Approved" name="Approved" sourceRef="Gateway_Eligibility" targetRef="Task_RecordDecision" />
+    <bpmn:sequenceFlow id="Flow_RejectPath" name="Rejected" sourceRef="Gateway_Eligibility" targetRef="Task_NotifyClaimant" />
+    <bpmn:task id="Task_RecordDecision" name="Record Decision (Audit)">
+      <bpmn:incoming>Flow_Approved</bpmn:incoming>
+      <bpmn:outgoing>Flow_RecordToPay</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_NotifyClaimant" name="Notify Claimant">
+      <bpmn:incoming>Flow_RejectPath</bpmn:incoming>
+      <bpmn:outgoing>Flow_NotifyToEnd</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="EndEvent_1" name="Claim Processed">
+      <bpmn:incoming>Flow_RecordToPay</bpmn:incoming>
+      <bpmn:incoming>Flow_NotifyToEnd</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_SubmitToVerify" sourceRef="StartEvent_1" targetRef="Task_VerifyClaim" />
+    <bpmn:sequenceFlow id="Flow_VerifyToEligibility" sourceRef="Task_VerifyClaim" targetRef="Gateway_Eligibility" />
+    <bpmn:sequenceFlow id="Flow_EligibilityDecision" sourceRef="Gateway_Eligibility" targetRef="Task_RecordDecision" />
+    <bpmn:sequenceFlow id="Flow_RecordToPay" sourceRef="Task_RecordDecision" targetRef="EndEvent_1" />
+    <bpmn:sequenceFlow id="Flow_NotifyToEnd" sourceRef="Task_NotifyClaimant" targetRef="EndEvent_1" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="156" y="82" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_VerifyClaim_di" bpmnElement="Task_VerifyClaim">
+        <dc:Bounds x="250" y="60" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Eligibility_di" bpmnElement="Gateway_Eligibility">
+        <dc:Bounds x="410" y="75" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_RecordDecision_di" bpmnElement="Task_RecordDecision">
+        <dc:Bounds x="520" y="60" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_NotifyClaimant_di" bpmnElement="Task_NotifyClaimant">
+        <dc:Bounds x="250" y="260" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1_di" bpmnElement="EndEvent_1">
+        <dc:Bounds x="692" y="82" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_SubmitToVerify_di" bpmnElement="Flow_SubmitToVerify">
+        <di:waypoint x="192" y="100" />
+        <di:waypoint x="250" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_VerifyToEligibility_di" bpmnElement="Flow_VerifyToEligibility">
+        <di:waypoint x="350" y="100" />
+        <di:waypoint x="410" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_EligibilityDecision_di" bpmnElement="Flow_EligibilityDecision">
+        <di:waypoint x="460" y="100" />
+        <di:waypoint x="520" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_RecordToPay_di" bpmnElement="Flow_RecordToPay">
+        <di:waypoint x="620" y="100" />
+        <di:waypoint x="692" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_NotifyToEnd_di" bpmnElement="Flow_NotifyToEnd">
+        <di:waypoint x="350" y="300" />
+        <di:waypoint x="710" y="300" />
+        <di:waypoint x="710" y="118" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

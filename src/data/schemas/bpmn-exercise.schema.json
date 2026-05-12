@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://agilefocus.github.io/schemas/bpmn-exercise.schema.json",
+  "type": "object",
+  "title": "BPMN Exercise",
+  "description": "A BPMN modelling exercise for the AgileFocus sandbox",
+  "required": ["id", "title", "tier", "level_required", "context", "instructions"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Unique identifier (kebab-case)"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 5,
+      "description": "Display title"
+    },
+    "tier": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Exercise tier (1=comprehension, 2=modelling, 3=audit, 4=interview, 5=capstone)"
+    },
+    "level_required": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Minimum user level required"
+    },
+    "context": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Business/regulatory context for the exercise"
+    },
+    "instructions": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Instructions for the learner"
+    },
+    "model_answer_file": {
+      "type": "string",
+      "description": "Path to the model answer BPMN file"
+    },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "question", "options", "correct_answer", "points"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "type": { "type": "string" },
+          "question": { "type": "string", "minLength": 5 },
+          "options": {
+            "type": "array",
+            "minItems": 2,
+            "items": { "type": "string" }
+          },
+          "correct_answer": { "type": "string" },
+          "points": { "type": "integer", "minimum": 1 }
+        }
+      },
+      "description": "Multiple-choice questions (tier 1 exercises only)"
+    },
+    "max_points": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Maximum achievable points"
+    },
+    "rubric": {
+      "type": "object",
+      "required": ["feedback_messages"],
+      "properties": {
+        "required_elements": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["type", "minimum_count", "description", "points"],
+            "properties": {
+              "type": { "type": "string", "minLength": 3 },
+              "minimum_count": { "type": "integer", "minimum": 1 },
+              "description": { "type": "string", "minLength": 5 },
+              "points": { "type": "integer", "minimum": 1 }
+            }
+          },
+          "description": "Required BPMN elements (min 3)"
+        },
+        "required_patterns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["pattern_id", "description", "check_function", "points"],
+            "properties": {
+              "pattern_id": { "type": "string", "minLength": 1 },
+              "description": { "type": "string", "minLength": 5 },
+              "check_function": { "type": "string", "minLength": 1 },
+              "points": { "type": "integer", "minimum": 1 }
+            }
+          }
+        },
+        "forbidden_antipatterns": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["pattern_id", "description", "check_function", "penalty"],
+            "properties": {
+              "pattern_id": { "type": "string", "minLength": 1 },
+              "description": { "type": "string", "minLength": 5 },
+              "check_function": { "type": "string", "minLength": 1 },
+              "penalty": { "type": "integer", "minimum": 1 }
+            }
+          },
+          "description": "Forbidden antipatterns (min 2)"
+        },
+        "partial_credit_rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["condition", "points", "feedback"],
+            "properties": {
+              "condition": { "type": "string", "minLength": 1 },
+              "points": { "type": "integer", "minimum": 1 },
+              "feedback": { "type": "string", "minLength": 5 }
+            }
+          }
+        },
+        "feedback_messages": {
+          "type": "object",
+          "required": ["pass", "fail"],
+          "properties": {
+            "pass": { "type": "string", "minLength": 5 },
+            "fail": { "type": "string", "minLength": 5 },
+            "partial": { "type": "string" }
+          },
+          "description": "Feedback messages must have pass and fail keys"
+        },
+        "max_points": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "description": "Evaluation rubric with required elements, patterns, and antipatterns"
+    }
+  }
+}

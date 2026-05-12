@@ -1,0 +1,48 @@
+{
+  "id": "bcs-ba",
+  "title": "BCS Business Analysis Diploma",
+  "source": "BCS",
+  "overall_weight": 100,
+  "domains": [
+    {
+      "domain_id": "ba-practice",
+      "name": "Business Analysis Practice",
+      "weight": 25,
+      "description": "Strategic context, business analysis lifecycle, stakeholder analysis, and solution evaluation",
+      "key_topics": ["Strategic context", "BA lifecycle", "Stakeholder analysis", "Solution evaluation", "Business case"],
+      "coverage_activities": ["meridian-fraud-triage", "tier1-benefit-claim", "governance-topic-1", "governance-topic-5"]
+    },
+    {
+      "domain_id": "requirements-engineering",
+      "name": "Requirements Engineering",
+      "weight": 25,
+      "description": "Elicitation, analysis, validation, and management of requirements throughout the project lifecycle",
+      "key_topics": ["Elicitation techniques", "Requirements analysis", "Validation", "Requirements management", "User stories"],
+      "coverage_activities": ["meridian-fraud-triage", "tier2-it-change-request", "tier3-mortgage-application", "governance-topic-3"]
+    },
+    {
+      "domain_id": "business-process",
+      "name": "Modelling Business Processes",
+      "weight": 20,
+      "description": "Process modelling techniques including BPMN, process improvement, and gap analysis",
+      "key_topics": ["BPMN modelling", "Process improvement", "As-is and to-be", "Gap analysis", "Process metrics"],
+      "coverage_activities": ["tier1-benefit-claim", "tier2-it-change-request", "tier3-mortgage-application"]
+    },
+    {
+      "domain_id": "data-modelling",
+      "name": "Data Modelling",
+      "weight": 15,
+      "description": "Entity relationship modelling, data flows, data dictionaries, and data requirements",
+      "key_topics": ["Entity relationship", "Data flows", "Data dictionaries", "Normalisation"],
+      "coverage_activities": ["tier3-mortgage-application", "governance-topic-3"]
+    },
+    {
+      "domain_id": "digital-environment",
+      "name": "Business Analysis in a Digital Environment",
+      "weight": 15,
+      "description": "Agile BA, digital transformation, Lean practices, and BA role in regulated digital delivery",
+      "key_topics": ["Agile BA", "Digital transformation", "Lean practices", "Regulated delivery", "BA in Agile"],
+      "coverage_activities": ["meridian-fraud-triage", "governance-topic-2", "governance-topic-6"]
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "id": "tier3-mortgage-application",
+  "title": "Mortgage Application — Find the Errors",
+  "tier": 3,
+  "level_required": 3,
+  "context": "A junior BA at a UK retail bank has drafted a BPMN diagram for the mortgage application process. Unfortunately, it contains several errors that would be flagged in a regulatory audit. The process must follow FCA CONC rules (Consumer Credit) and PRA requirements for responsible lending.",
+  "instructions": "Review the provided BPMN diagram carefully. Identify and document all errors. There are exactly 4 deliberate problems in the diagram. For each error, state the element ID, the type of issue, and why it is a regulatory concern.",
+  "model_answer_file": "models/tier3-mortgage-errors.bpmn",
+  "rubric": {
+    "required_elements": [
+      {
+        "type": "bpmn:BoundaryEvent",
+        "minimum_count": 1,
+        "description": "A boundary error event on the underwriting subprocess is required by regulation",
+        "points": 5
+      }
+    ],
+    "required_patterns": [
+      {
+        "pattern_id": "has_audit_trail",
+        "description": "At least one audit-relevant task must exist for compliance evidence",
+        "check_function": "has_audit_trail",
+        "points": 5
+      },
+      {
+        "pattern_id": "has_default_paths",
+        "description": "All exclusive gateways must have a default path",
+        "check_function": "has_default_paths",
+        "points": 5
+      }
+    ],
+    "forbidden_antipatterns": [
+      {
+        "pattern_id": "disconnected_elements",
+        "description": "No orphaned tasks — the compliance check task must be connected",
+        "check_function": "disconnected_elements",
+        "penalty": 5
+      },
+      {
+        "pattern_id": "no_default_gateway_path",
+        "description": "The eligibility gateway must have a default path",
+        "check_function": "no_default_gateway_path",
+        "penalty": 3
+      }
+    ],
+    "partial_credit_rules": [
+      {
+        "condition": "score_above_zero",
+        "points": 2,
+        "feedback": "Credit for identifying at least one issue"
+      }
+    ],
+    "feedback_messages": {
+      "pass": "You correctly identified all 4 regulatory errors in the mortgage application process.",
+      "fail": "Some errors were missed. Review the diagram for missing boundary events, default paths, orphaned tasks, and audit compliance.",
+      "partial": "You found some issues. Check the underwriting subprocess and gateway configurations again."
+    },
+    "max_points": 17
+  }
+}

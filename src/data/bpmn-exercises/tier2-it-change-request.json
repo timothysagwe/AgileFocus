@@ -1,0 +1,107 @@
+{
+  "id": "tier2-it-change-request",
+  "title": "IT Change Request Workflow",
+  "tier": 2,
+  "level_required": 2,
+  "context": "You are a Business Analyst at a FCA-regulated financial services firm. The firm needs a BPMN diagram for their IT Change Request process. All changes must be reviewed by IT, Risk, and the Change Advisory Board (CAB) before being deployed to production. Audit trails are mandatory for regulatory compliance (FCA SYSC and GDPR).",
+  "instructions": "Model the IT Change Request process as a BPMN diagram. Include the following: lanes for IT, Risk, and CAB; exclusive gateways for approval decisions; a review subprocess with error boundary handling; at least one task with audit keywords (review, approve, record); and default paths on all exclusive gateways.",
+  "model_answer_file": "models/tier2-it-change-answer.bpmn",
+  "rubric": {
+    "required_elements": [
+      {
+        "type": "bpmn:Lane",
+        "minimum_count": 3,
+        "description": "At least 3 lanes for IT, Risk, CAB",
+        "points": 3
+      },
+      {
+        "type": "bpmn:ExclusiveGateway",
+        "minimum_count": 2,
+        "description": "At least 2 exclusive gateways for approval decisions",
+        "points": 4
+      },
+      {
+        "type": "bpmn:SubProcess",
+        "minimum_count": 1,
+        "description": "A review subprocess for the change assessment",
+        "points": 3
+      },
+      {
+        "type": "bpmn:Task",
+        "minimum_count": 3,
+        "description": "At least 3 tasks across the process",
+        "points": 2
+      }
+    ],
+    "required_patterns": [
+      {
+        "pattern_id": "has_error_handling",
+        "description": "Every subprocess must have an error boundary event (regulatory requirement)",
+        "check_function": "has_error_handling",
+        "points": 4
+      },
+      {
+        "pattern_id": "has_default_paths",
+        "description": "All exclusive gateways must have a default path",
+        "check_function": "has_default_paths",
+        "points": 3
+      },
+      {
+        "pattern_id": "has_audit_trail",
+        "description": "At least one task must be audit-relevant (log, record, evidence, notify, confirm, approve, review)",
+        "check_function": "has_audit_trail",
+        "points": 3
+      },
+      {
+        "pattern_id": "has_lanes",
+        "description": "Diagram must have at least 2 lanes (multi-stakeholder)",
+        "check_function": "has_lanes",
+        "points": 2
+      },
+      {
+        "pattern_id": "is_complete_flow",
+        "description": "All flow objects must have valid connections",
+        "check_function": "is_complete_flow",
+        "points": 2
+      },
+      {
+        "pattern_id": "has_start_and_end",
+        "description": "Diagram must have one start event and at least one end event",
+        "check_function": "has_start_and_end",
+        "points": 1
+      }
+    ],
+    "forbidden_antipatterns": [
+      {
+        "pattern_id": "disconnected_elements",
+        "description": "No orphaned flow objects",
+        "check_function": "disconnected_elements",
+        "penalty": 5
+      },
+      {
+        "pattern_id": "no_default_gateway_path",
+        "description": "All exclusive gateways must have a default path",
+        "check_function": "no_default_gateway_path",
+        "penalty": 3
+      }
+    ],
+    "partial_credit_rules": [
+      {
+        "condition": "any_element_present",
+        "points": 2,
+        "feedback": "Some required elements were added"
+      },
+      {
+        "condition": "at_least_one_pattern_passed",
+        "points": 2,
+        "feedback": "At least one structural pattern is correct"
+      }
+    ],
+    "feedback_messages": {
+      "pass": "Your IT Change Request diagram meets all requirements. It properly handles approvals, exceptions, and audit compliance.",
+      "fail": "Your diagram needs revision. Review the regulatory requirements for gateways, error handling, and audit trails.",
+      "partial": "Good progress. Focus on the missing elements and patterns listed above."
+    },
+    "max_points": 27
+  }
+}

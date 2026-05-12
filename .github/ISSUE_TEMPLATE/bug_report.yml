@@ -1,0 +1,67 @@
+name: Bug Report
+description: Report a bug or unexpected behaviour in the sandbox
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report. Please provide as much detail as possible.
+
+  - type: input
+    id: page
+    attributes:
+      label: Page / Route
+      description: Which page or route did you encounter the bug on?
+      placeholder: e.g., /bpmn/exercise/tier2-it-change-request
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: What happened? What did you expect to happen?
+      placeholder: When I clicked X, I expected Y but Z happened instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this issue?
+      placeholder: |
+        1. Go to ...
+        2. Click on ...
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser, OS, device
+      placeholder: Chrome 120 / macOS 14.3 / Desktop
+    validations:
+      required: false
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Critical (app broken, no workaround)
+        - Major (feature broken, workaround exists)
+        - Minor (cosmetic / non-functional)
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console / Error Logs
+      description: Paste any browser console errors or relevant logs.
+      render: shell
+    validations:
+      required: false

@@ -1,0 +1,64 @@
+{
+  "id": "pmi-acp",
+  "title": "PMI Agile Certified Practitioner",
+  "source": "PMI",
+  "overall_weight": 100,
+  "domains": [
+    {
+      "domain_id": "agile-principles",
+      "name": "Agile Principles and Mindset",
+      "weight": 16,
+      "description": "Understanding the Agile Manifesto, 12 principles, and cultivating an Agile mindset across the organisation",
+      "key_topics": ["Agile Manifesto", "12 principles", "Agile mindset", "Servant leadership"],
+      "coverage_activities": ["tier1-benefit-claim", "governance-topic-1", "governance-topic-2"]
+    },
+    {
+      "domain_id": "value-delivery",
+      "name": "Value-Driven Delivery",
+      "weight": 20,
+      "description": "Prioritising and delivering maximum business value through iterative delivery and customer feedback",
+      "key_topics": ["Value prioritisation", "Minimum Viable Product", "Iterative delivery", "Customer feedback"],
+      "coverage_activities": ["meridian-fraud-triage", "tier2-it-change-request", "tier3-mortgage-application"]
+    },
+    {
+      "domain_id": "stakeholder-engagement",
+      "name": "Stakeholder Engagement",
+      "weight": 15,
+      "description": "Engaging stakeholders throughout the project lifecycle, managing expectations and communications",
+      "key_topics": ["Stakeholder analysis", "Communication planning", "Active listening", "Conflict resolution"],
+      "coverage_activities": ["meridian-fraud-triage", "governance-topic-1", "governance-topic-5"]
+    },
+    {
+      "domain_id": "team-performance",
+      "name": "Team Performance",
+      "weight": 15,
+      "description": "Building high-performing Agile teams through coaching, facilitation, and removing impediments",
+      "key_topics": ["Team dynamics", "Coaching", "Facilitation", "Impediment removal", "Self-organisation"],
+      "coverage_activities": ["meridian-fraud-triage", "governance-topic-2", "governance-topic-5"]
+    },
+    {
+      "domain_id": "adaptive-planning",
+      "name": "Adaptive Planning",
+      "weight": 14,
+      "description": "Planning at multiple horizons and adjusting based on feedback and changing conditions",
+      "key_topics": ["Rolling wave planning", "Estimation techniques", "Release planning", "Sprint planning"],
+      "coverage_activities": ["tier1-benefit-claim", "tier2-it-change-request", "governance-topic-4"]
+    },
+    {
+      "domain_id": "problem-detection",
+      "name": "Problem Detection and Resolution",
+      "weight": 10,
+      "description": "Identifying problems early and applying root cause analysis and corrective actions",
+      "key_topics": ["Root cause analysis", "Inspection", "Adaptation", "Risk management"],
+      "coverage_activities": ["tier3-mortgage-application", "meridian-fraud-triage", "governance-topic-6"]
+    },
+    {
+      "domain_id": "continuous-improvement",
+      "name": "Continuous Improvement",
+      "weight": 10,
+      "description": "Kaizen mindset, process improvement through retrospectives, and metrics-driven improvement",
+      "key_topics": ["Kaizen", "Retrospectives", "Process tailoring", "Metrics"],
+      "coverage_activities": ["governance-topic-3", "governance-topic-4", "governance-topic-6"]
+    }
+  ]
+}

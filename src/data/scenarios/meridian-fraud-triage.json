@@ -1,0 +1,543 @@
+{
+  "id": "meridian-fraud-triage",
+  "title": "Meridian Bank — Fraud Alert Triage System",
+  "level_required": 3,
+  "context": {
+    "organisation": {
+      "name": "Meridian Bank",
+      "type": "challenger_bank",
+      "founded": 2019,
+      "customers": 280000,
+      "regulator": "FCA",
+      "authorisation_status": "FCA authorised",
+      "channel": "digital-only",
+      "pci_dss_scope": true
+    },
+    "regulatory_context": "FCA Consumer Duty obligations require proactive fraud detection and timely alert triage. PCI-DSS applies to all card data handling. Hard regulatory deadline: 6 months.",
+    "team_composition": {
+      "developers": 5,
+      "qa": 1,
+      "ba": 1,
+      "product_owner": 1
+    }
+  },
+  "personas_active": ["product-owner-challenger", "risk-manager-tier1", "internal-auditor"],
+  "sprints": [
+    {
+      "sprint_number": 1,
+      "goal": "Establish backlog, agree Definition of Done, set up team agreements",
+      "duration_days": 10,
+      "initial_backlog": [
+        { "id": "alert-queue", "title": "As a fraud analyst, I can view alert queue", "points": 8, "type": "regulatory", "description": "Paginated queue of incoming fraud alerts sorted by priority" },
+        { "id": "action-alert", "title": "As a fraud analyst, I can action an alert", "points": 5, "type": "business", "description": "Review, disposition (confirm fraud / false positive), and close alerts" },
+        { "id": "alert-logging", "title": "As a system, alerts are logged with timestamp", "points": 3, "type": "regulatory", "description": "Every alert receives an immutable timestamp at creation" },
+        { "id": "alert-thresholds", "title": "As an admin, I can configure alert thresholds", "points": 5, "type": "business", "description": "Configuration UI for threshold parameters per alert type" },
+        { "id": "case-notes", "title": "As a fraud analyst, I can add case notes", "points": 3, "type": "business", "description": "Free-text notes attached to each alert case" },
+        { "id": "pci-masking", "title": "As a system, PCI-DSS card data is masked in alerts", "points": 8, "type": "regulatory", "description": "All PAN/cardholder data masked per PCI-DSS requirement 3.4" },
+        { "id": "escalate-alert", "title": "As a fraud analyst, I can escalate alerts to senior review", "points": 3, "type": "business", "description": "Send alerts requiring senior judgement to designated reviewer" },
+        { "id": "audit-log", "title": "As a system, all user actions are audit logged", "points": 5, "type": "regulatory", "description": "Every user action is logged with user ID, timestamp, and action detail" }
+      ],
+      "injected_events": [],
+      "available_decisions": [
+        {
+          "id": "dod-choice",
+          "trigger": "immediate",
+          "title": "Define your Definition of Done",
+          "description": "Your first decision as BA. What standard will the team hold itself to?",
+          "options": [
+            {
+              "id": "dod-standard",
+              "label": "Standard Agile DoD",
+              "description": "Code complete, unit tests pass, peer reviewed, acceptance criteria met",
+              "risk": "medium",
+              "state_changes": {
+                "dod_choice": "standard",
+                "velocity_modifier": 1.0,
+                "quality_modifier": 0.9,
+                "regulatory_rigour": 0.5,
+                "team_capacity_percentage": 100
+              }
+            },
+            {
+              "id": "dod-regulated",
+              "label": "Regulated DoD",
+              "description": "Standard DoD plus controls sign-off, security review, compliance checklist, evidence capture",
+              "risk": "low",
+              "state_changes": {
+                "dod_choice": "regulated",
+                "velocity_modifier": 0.85,
+                "quality_modifier": 1.3,
+                "regulatory_rigour": 1.5,
+                "team_capacity_percentage": 95
+              }
+            },
+            {
+              "id": "dod-minimal",
+              "label": "Minimal DoD",
+              "description": "Code complete only. Move fast, fix later.",
+              "risk": "high",
+              "state_changes": {
+                "dod_choice": "minimal",
+                "velocity_modifier": 1.15,
+                "quality_modifier": 0.6,
+                "regulatory_rigour": 0.2,
+                "team_capacity_percentage": 105
+              }
+            }
+          ]
+        }
+      ],
+      "scoring_rubric": {
+        "criteria": [
+          { "id": "dod_selected", "description": "Definition of Done was agreed", "weight": 1.0 }
+        ],
+        "max_score": 10,
+        "pass_threshold": 5
+      }
+    },
+    {
+      "sprint_number": 2,
+      "goal": "Deliver core alert viewing and actioning functionality",
+      "duration_days": 12,
+      "initial_backlog": [
+        { "id": "alert-queue-delivery", "title": "Complete alert queue UI with sorting and filtering", "points": 6, "type": "regulatory", "description": "Production-ready alert queue with sort, filter, and pagination" },
+        { "id": "action-alert-delivery", "title": "Complete alert actioning workflow", "points": 7, "type": "business", "description": "End-to-end alert disposition workflow with confirmation" }
+      ],
+      "injected_events": [
+        {
+          "trigger": "day",
+          "trigger_value": 3,
+          "event_type": "backlog_injection",
+          "payload": {
+            "type": "scope_expansion",
+            "description": "Product Owner rewrites 3 stories with expanded scope",
+            "changes": [
+              {
+                "story_id": "alert-queue",
+                "new_title": "As a fraud analyst, I can view alert queue with reporting dashboard",
+                "additional_points": 5,
+                "detail": "PO added reporting dashboard requirements on top of alert queue"
+              },
+              {
+                "story_id": "action-alert",
+                "new_title": "As a fraud analyst, I can action alerts individually or in bulk",
+                "additional_points": 4,
+                "detail": "PO added bulk action capability to alert actioning"
+              },
+              {
+                "story_id": "case-notes",
+                "new_title": "As a fraud analyst, I can add case notes with analytics",
+                "additional_points": 3,
+                "detail": "PO added analytics tracking to case notes"
+              }
+            ],
+            "total_additional_points": 12
+          }
+        }
+      ],
+      "available_decisions": [
+        {
+          "id": "scope-response",
+          "trigger": "event",
+          "trigger_event_type": "scope_expansion",
+          "title": "How do you respond to the scope expansion?",
+          "description": "The Product Owner has expanded 3 stories significantly. This adds 12 story points to the sprint.",
+          "options": [
+            {
+              "id": "scope-accept",
+              "label": "Accept all changes",
+              "description": "Take on the full scope increase. The team will need to work overtime.",
+              "risk": "high",
+              "state_changes": {
+                "scope_response": "accepted",
+                "sprint_scope_creep": 12,
+                "velocity_modifier": -0.1,
+                "team_capacity_percentage": 110,
+                "po_trust_modifier": 8
+              }
+            },
+            {
+              "id": "scope-negotiate",
+              "label": "Negotiate partial scope",
+              "description": "Accept the reporting dashboard but push back on bulk actions and analytics. Offer to schedule for sprint 3.",
+              "risk": "medium",
+              "state_changes": {
+                "scope_response": "negotiated",
+                "sprint_scope_creep": 5,
+                "velocity_modifier": -0.03,
+                "team_capacity_percentage": 100,
+                "po_trust_modifier": 3
+              }
+            },
+            {
+              "id": "scope-reject",
+              "label": "Reject all scope changes",
+              "description": "Hold the original sprint commitment. All changes go to backlog for future prioritisation.",
+              "risk": "low",
+              "state_changes": {
+                "scope_response": "rejected",
+                "sprint_scope_creep": 0,
+                "velocity_modifier": 0,
+                "team_capacity_percentage": 100,
+                "po_trust_modifier": -5
+              }
+            }
+          ]
+        }
+      ],
+      "scoring_rubric": {
+        "criteria": [
+          { "id": "backlog_delivered", "description": "Core stories delivered", "weight": 1.0 },
+          { "id": "scope_managed", "description": "Scope changes managed appropriately", "weight": 0.8 }
+        ],
+        "max_score": 15,
+        "pass_threshold": 8
+      }
+    },
+    {
+      "sprint_number": 3,
+      "goal": "Deliver PCI-DSS compliance stories and establish audit trail",
+      "duration_days": 14,
+      "initial_backlog": [
+        { "id": "pci-masking-delivery", "title": "Complete PCI-DSS card data masking", "points": 8, "type": "regulatory", "description": "Full PCI-DSS compliant card data masking across all alert views and logs" },
+        { "id": "audit-log-delivery", "title": "Complete audit logging system", "points": 5, "type": "regulatory", "description": "Immutable audit log with user ID, timestamp, and action detail" },
+        { "id": "alert-logging-delivery", "title": "Complete alert timestamp logging", "points": 3, "type": "regulatory", "description": "Automated timestamp logging on all alert lifecycle events" }
+      ],
+      "injected_events": [
+        {
+          "trigger": "day",
+          "trigger_value": 1,
+          "event_type": "persona_trigger",
+          "payload": {
+            "persona_id": "risk-manager-tier1",
+            "condition": "dod_choice != regulated",
+            "response_key": "dod_rejected",
+            "trust_delta": -15,
+            "cascade_state_change": { "regulatory_pressure": "elevated", "dod_disputed": true },
+            "response_text": "I have reviewed your Definition of Done. This is not adequate for a regulated financial services environment. I am formally raising a concern. We need controls sign-off and security review in the DoD, or I cannot approve the sprint deliverables."
+          }
+        },
+        {
+          "trigger": "day",
+          "trigger_value": 5,
+          "event_type": "decision",
+          "payload": {
+            "title": "Internal Auditor requests evidence pack",
+            "description": "Sarah Varma (Internal Auditor) has requested a complete evidence pack for sprints 1-2.",
+            "decision_id": "evidence-response"
+          }
+        }
+      ],
+      "available_decisions": [
+        {
+          "id": "evidence-response",
+          "trigger": "event",
+          "trigger_event_type": "decision",
+          "title": "How do you respond to the evidence request?",
+          "description": "The Internal Auditor needs evidence for sprints 1-2. How do you handle this?",
+          "options": [
+            {
+              "id": "evidence-prepare-now",
+              "label": "Prepare evidence pack now",
+              "description": "Allocate 3 story points from this sprint to prepare the evidence pack",
+              "risk": "medium",
+              "state_changes": {
+                "evidence_pack_status": "in_progress",
+                "sprint_capacity_loss": 3,
+                "team_capacity_percentage": 90,
+                "auditor_trust_modifier": 8
+              }
+            },
+            {
+              "id": "evidence-defer",
+              "label": "Defer to sprint 5",
+              "description": "Agree to prepare the evidence pack in sprint 5, closer to the audit",
+              "risk": "medium",
+              "state_changes": {
+                "evidence_pack_status": "deferred",
+                "sprint_capacity_loss": 0,
+                "team_capacity_percentage": 100,
+                "auditor_trust_modifier": -3
+              }
+            },
+            {
+              "id": "evidence-push-back",
+              "label": "Push back and explain Agile approach",
+              "description": "Explain that in Agile, working software is the primary evidence, and we capture artefacts incrementally",
+              "risk": "high",
+              "state_changes": {
+                "evidence_pack_status": "none",
+                "sprint_capacity_loss": 0,
+                "team_capacity_percentage": 100,
+                "auditor_trust_modifier": -10
+              }
+            }
+          ]
+        }
+      ],
+      "scoring_rubric": {
+        "criteria": [
+          { "id": "regulatory_stories_delivered", "description": "PCI-DSS stories delivered", "weight": 1.0 },
+          { "id": "evidence_handled", "description": "Evidence request handled appropriately", "weight": 0.8 }
+        ],
+        "max_score": 15,
+        "pass_threshold": 8
+      }
+    },
+    {
+      "sprint_number": 4,
+      "goal": "Deliver audit logging and escalation stories",
+      "duration_days": 14,
+      "initial_backlog": [
+        { "id": "escalate-delivery", "title": "Complete alert escalation to senior review", "points": 3, "type": "business", "description": "Full escalation workflow with assigned senior reviewer" },
+        { "id": "alert-thresholds-delivery", "title": "Complete alert threshold configuration", "points": 5, "type": "business", "description": "Admin configuration UI for threshold parameters" },
+        { "id": "case-notes-delivery", "title": "Complete case notes feature", "points": 3, "type": "business", "description": "Free-text case notes attached to alert records" }
+      ],
+      "injected_events": [
+        {
+          "trigger": "day",
+          "trigger_value": 0,
+          "event_type": "state_change",
+          "payload": {
+            "description": "Change freeze announced — 14-day month-end processing window",
+            "state_changes": {
+              "change_freeze_active": true,
+              "change_freeze_days_remaining": 14,
+              "regulatory_pressure": "elevated"
+            }
+          }
+        }
+      ],
+      "available_decisions": [
+        {
+          "id": "freeze-response",
+          "trigger": "event",
+          "trigger_event_type": "state_change",
+          "title": "How do you handle the change freeze?",
+          "description": "A 14-day change freeze has been announced due to month-end processing. Sprint planning is tomorrow.",
+          "options": [
+            {
+              "id": "freeze-non-prod",
+              "label": "Plan only non-production work",
+              "description": "Focus on documentation, test writing, BPMN process mapping, and design — no production deployments",
+              "risk": "low",
+              "state_changes": {
+                "freeze_response": "non_prod",
+                "sprint_capacity_loss": 2,
+                "change_freeze_impact": "low",
+                "team_capacity_percentage": 90,
+                "quality_modifier": 1.1
+              }
+            },
+            {
+              "id": "freeze-emergency",
+              "label": "Negotiate emergency exception for regulatory stories",
+              "description": "Argue that PCI-DSS compliance stories qualify for emergency change exception",
+              "risk": "medium",
+              "state_changes": {
+                "freeze_response": "emergency_exception",
+                "sprint_capacity_loss": 0,
+                "change_freeze_impact": "medium",
+                "team_capacity_percentage": 100,
+                "regulatory_pressure": "critical"
+              }
+            },
+            {
+              "id": "freeze-ignore",
+              "label": "Proceed as normal and risk CAB rejection",
+              "description": "Plan the sprint as normal. If the CAB rejects the changes, the work is wasted.",
+              "risk": "high",
+              "state_changes": {
+                "freeze_response": "ignored",
+                "sprint_capacity_loss": 6,
+                "change_freeze_impact": "high",
+                "team_capacity_percentage": 100
+              }
+            }
+          ]
+        }
+      ],
+      "scoring_rubric": {
+        "criteria": [
+          { "id": "freeze_handled", "description": "Change freeze managed appropriately", "weight": 1.0 },
+          { "id": "stories_progressed", "description": "Stories progressed despite constraints", "weight": 0.7 }
+        ],
+        "max_score": 15,
+        "pass_threshold": 8
+      }
+    },
+    {
+      "sprint_number": 5,
+      "goal": "Complete remaining regulatory backlog before regulatory deadline",
+      "duration_days": 12,
+      "initial_backlog": [
+        { "id": "remaining-reg-1", "title": "Complete any remaining PCI-DSS remediation items", "points": 5, "type": "regulatory", "description": "Address any outstanding PCI-DSS findings from the compliance review" },
+        { "id": "remaining-reg-2", "title": "Complete evidence pack for audit", "points": 5, "type": "regulatory", "description": "Assemble and finalise evidence pack for all sprints to date" },
+        { "id": "remaining-business", "title": "Complete remaining business features", "points": 5, "type": "business", "description": "Deliver any outstanding business stories" }
+      ],
+      "injected_events": [
+        {
+          "trigger": "day",
+          "trigger_value": 2,
+          "event_type": "backlog_injection",
+          "payload": {
+            "type": "regulatory_must_have",
+            "description": "FCA publishes updated Consumer Duty guidance. Two new regulatory must-haves injected.",
+            "new_stories": [
+              { "id": "fca-consumer-vulnerability", "title": "As a system, vulnerable customer alerts are flagged and prioritised", "points": 8, "type": "regulatory", "description": "FCA Consumer Duty 2024: vulnerable customer indicators must be surfaced in alert triage" },
+              { "id": "fca-outcome-reporting", "title": "As a compliance officer, I can generate Consumer Duty outcome reports", "points": 5, "type": "regulatory", "description": "Monthly Consumer Duty outcome reporting per FCA guidelines" }
+            ],
+            "total_additional_points": 13
+          }
+        }
+      ],
+      "available_decisions": [
+        {
+          "id": "fca-response",
+          "trigger": "event",
+          "trigger_event_type": "regulatory_must_have",
+          "title": "How do you respond to the new FCA requirements?",
+          "description": "FCA has published updated Consumer Duty guidance. Two new regulatory must-haves have been injected. Trust scores affect available options.",
+          "options": [
+            {
+              "id": "fca-reprioritise",
+              "label": "Re-prioritise backlog",
+              "description": "Replace the lowest-priority business stories with the new FCA requirements. Accept the timeline impact.",
+              "risk": "low",
+              "condition": "true",
+              "state_changes": {
+                "fca_response": "reprioritised",
+                "sprint_scope_creep": 8,
+                "regulatory_rigour": 1.3,
+                "backlog_size_modifier": -3
+              }
+            },
+            {
+              "id": "fca-escalate",
+              "label": "Escalate to Product Owner",
+              "description": "Escalate the decision to the Product Owner. May cause delay while PO reassesses priorities.",
+              "risk": "medium",
+              "condition": "true",
+              "state_changes": {
+                "fca_response": "escalated",
+                "sprint_scope_creep": 5,
+                "regulatory_rigour": 1.1
+              }
+            },
+            {
+              "id": "fca-extend",
+              "label": "Request timeline extension",
+              "description": "Formally request a timeline extension from the programme board, citing new regulatory requirements.",
+              "risk": "medium",
+              "condition": "risk_manager_trust >= 40",
+              "state_changes": {
+                "fca_response": "timeline_extension",
+                "timeline_extension_requested": true,
+                "regulatory_rigour": 1.2,
+                "team_capacity_percentage": 100
+              }
+            }
+          ]
+        }
+      ],
+      "scoring_rubric": {
+        "criteria": [
+          { "id": "fca_handled", "description": "New FCA requirements handled appropriately", "weight": 1.0 },
+          { "id": "regulatory_coverage", "description": "Regulatory backlog addressed", "weight": 0.9 }
+        ],
+        "max_score": 15,
+        "pass_threshold": 8
+      }
+    },
+    {
+      "sprint_number": 6,
+      "goal": "Production release and audit review",
+      "duration_days": 10,
+      "initial_backlog": [
+        { "id": "release-prep", "title": "Complete release preparation and deployment", "points": 5, "type": "business", "description": "Production deployment of the fraud alert triage system" },
+        { "id": "audit-evidence", "title": "Complete final audit evidence pack", "points": 5, "type": "regulatory", "description": "Final evidence pack compilation for audit committee review" },
+        { "id": "sign-off", "title": "Obtain regulatory sign-off", "points": 3, "type": "regulatory", "description": "Formal sign-off from Risk Manager and Internal Auditor" }
+      ],
+      "injected_events": [
+        {
+          "trigger": "day",
+          "trigger_value": 1,
+          "event_type": "persona_trigger",
+          "payload": {
+            "persona_id": "internal-auditor",
+            "condition": "true",
+            "response_key": "audit_review",
+            "trust_delta": 0,
+            "cascade_state_change": {},
+            "response_text": "I am conducting the sprint artefact review. I will assess the completeness of your evidence pack, the quality of your audit logs, and the traceability of your requirements. My findings will feed into the audit committee report."
+          }
+        }
+      ],
+      "available_decisions": [
+        {
+          "id": "release-decision",
+          "trigger": "day",
+          "trigger_value": 5,
+          "title": "Release decision — are you ready to go live?",
+          "description": "Complete the release readiness checklist before making your final decision.",
+          "options": [
+            {
+              "id": "release-go",
+              "label": "Proceed with release",
+              "description": "All checks pass. Deploy the fraud alert triage system to production.",
+              "risk": "low",
+              "state_changes": {
+                "release_decision": "go",
+                "project_completed": true,
+                "delivery_success": true
+              }
+            },
+            {
+              "id": "release-defer",
+              "label": "Defer release — address findings",
+              "description": "Defer the release to address outstanding audit findings. Delay of 2-4 weeks estimated.",
+              "risk": "medium",
+              "state_changes": {
+                "release_decision": "deferred",
+                "project_completed": true,
+                "delivery_success": false,
+                "timeline_breach": true
+              }
+            },
+            {
+              "id": "release-escalate",
+              "label": "Escalate release decision",
+              "description": "Escalate to programme board for release authority. They may override or impose conditions.",
+              "risk": "medium",
+              "state_changes": {
+                "release_decision": "escalated",
+                "project_completed": true,
+                "delivery_success": true,
+                "governance_override": true
+              }
+            }
+          ]
+        }
+      ],
+      "scoring_rubric": {
+        "criteria": [
+          { "id": "release_decision", "description": "Release decision made appropriately", "weight": 1.0 },
+          { "id": "audit_readiness", "description": "Audit readiness demonstrated", "weight": 1.0 },
+          { "id": "regulatory_compliance", "description": "Regulatory compliance achieved", "weight": 1.2 }
+        ],
+        "max_score": 20,
+        "pass_threshold": 12
+      }
+    }
+  ],
+  "success_criteria": [
+    { "id": "regulatory_stories_100pct", "description": "100% of regulatory stories delivered by sprint 6", "weight": 3.0 },
+    { "id": "audit_approval", "description": "Internal Auditor trust score >= 50 at end of simulation", "weight": 2.0 },
+    { "id": "risk_manager_approval", "description": "Risk Manager trust score >= 50 at end of simulation", "weight": 2.0 },
+    { "id": "po_satisfaction", "description": "Product Owner trust score >= 40 at end of simulation", "weight": 1.5 },
+    { "id": "timeline_met", "description": "Project completed within the 6-month regulatory deadline", "weight": 2.5 },
+    { "id": "evidence_quality", "description": "Evidence pack completed and comprehensive", "weight": 2.0 },
+    { "id": "governance_compliance", "description": "All governance gates passed without critical findings", "weight": 2.0 }
+  ],
+  "debrief_notes": "The Meridian Bank fraud alert triage simulation tests your ability to balance Agile delivery with regulatory compliance in a UK challenger bank. Key learnings: (1) Definition of Done choices cascade through the entire project — a regulated DoD protects against later audit findings. (2) Scope management is critical when dealing with deadline-driven Product Owners. (3) Regulatory events are unpredictable — building slack into sprints and maintaining stakeholder trust gives you options when FCA guidance changes. (4) Audit readiness is not a sprint-6 activity — it must be embedded from sprint 1. (5) The change freeze is a reality in financial services — non-production sprints can still deliver value through documentation, BPMN mapping, and test automation."
+}

@@ -1,0 +1,70 @@
+name: Content Suggestion
+description: Suggest a new scenario, persona, exercise, or knowledge check
+labels: [enhancement, content]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting new content! No code required — just describe what you'd like to see added.
+
+  - type: dropdown
+    id: content-type
+    attributes:
+      label: Content Type
+      options:
+        - Scenario
+        - Persona
+        - BPMN Exercise
+        - Knowledge Check
+        - Governance Topic
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: title
+    attributes:
+      label: Suggested Title
+      description: A short title for the content
+      placeholder: e.g., "NHS Digital — Clinical System Migration"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the content you'd like to see. What would it teach?
+      placeholder: This scenario would teach...
+    validations:
+      required: true
+
+  - type: input
+    id: regulatory-context
+    attributes:
+      label: Regulatory / Governance Context
+      description: What regulation, standard, or governance framework does this relate to?
+      placeholder: e.g., FCA Consumer Duty, DORA, GDS Standard, NHS DSP Toolkit
+    validations:
+      required: false
+
+  - type: textarea
+    id: learning-objectives
+    attributes:
+      label: Learning Objectives
+      description: What should a learner be able to do after completing this?
+      placeholder: |
+        - Understand how to...
+        - Apply the principles of...
+        - Identify key controls for...
+    validations:
+      required: false
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Reference Material
+      description: Any links, documents, or sources that would help create this content
+      placeholder: https://...
+    validations:
+      required: false
