@@ -96,7 +96,7 @@
 <Navigation />
 <main>
   {#if page === 'index'}
-    <Index />
+    <ProjectDashboard />
   {:else if page === 'learn'}
     <Learn />
   {:else if page === 'bpmn'}
@@ -154,7 +154,7 @@
   {:else if page === 'settings'}
     <Settings />
   {:else}
-    <Index />
+    <ProjectDashboard />
   {/if}
 </main>
 
