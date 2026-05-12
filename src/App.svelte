@@ -1,7 +1,7 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
   import './styles/global.css';
-  import { onPathChange } from './lib/router.js';
+  import { getPath, onPathChange } from './lib/router.js';
   import Navigation from './lib/components/Navigation.svelte';
   import Index from './routes/index.svelte';
   import Learn from './routes/learn/index.svelte';
@@ -68,7 +68,7 @@
 
   let unsub;
   onMount(() => {
-    page = resolveRoute(window.location.pathname);
+    page = resolveRoute(getPath());
     unsub = onPathChange((path) => {
       page = resolveRoute(path);
     });

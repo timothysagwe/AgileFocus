@@ -1,13 +1,24 @@
+import { base } from './base-path.js';
+
 const listeners = new Set();
 
-let currentPath = window.location.pathname;
+function stripBase(path) {
+  if (base === '/') return path;
+  if (path.startsWith(base)) {
+    return '/' + path.slice(base.length);
+  }
+  return path;
+}
+
+let currentPath = stripBase(window.location.pathname);
 
 export function getPath() {
   return currentPath;
 }
 
 export function navigate(path) {
-  history.pushState(null, '', path);
+  const fullPath = base.replace(/\/$/, '') + path;
+  history.pushState(null, '', fullPath);
   currentPath = path;
   listeners.forEach(fn => fn(path));
 }
@@ -18,6 +29,6 @@ export function onPathChange(fn) {
 }
 
 window.addEventListener('popstate', () => {
-  currentPath = window.location.pathname;
+  currentPath = stripBase(window.location.pathname);
   listeners.forEach(fn => fn(currentPath));
 });
