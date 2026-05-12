@@ -1,34 +1,24 @@
-import { base } from './base-path.js';
-
-const listeners = new Set();
-
-function stripBase(path) {
-  if (base === '/') return path;
-  if (path.startsWith(base)) {
-    return '/' + path.slice(base.length);
-  }
-  return path;
-}
-
-let currentPath = stripBase(window.location.pathname);
+const subscribers = new Set();
 
 export function getPath() {
-  return currentPath;
+  const base = import.meta.env.BASE_URL || '/';
+  const p = window.location.pathname;
+  if (p.startsWith(base)) return '/' + p.slice(base.length).replace(/^\/+/, '');
+  return p;
 }
 
-export function navigate(path) {
-  const fullPath = base.replace(/\/$/, '') + path;
-  history.pushState(null, '', fullPath);
-  currentPath = path;
-  listeners.forEach(fn => fn(path));
+export function navigate(href) {
+  const base = import.meta.env.BASE_URL || '/';
+  const full = base.replace(/\/+$/, '') + '/' + href.replace(/^\//, '');
+  history.pushState(null, '', full);
+  subscribers.forEach(fn => fn(getPath()));
 }
 
 export function onPathChange(fn) {
-  listeners.add(fn);
-  return () => listeners.delete(fn);
+  subscribers.add(fn);
+  return () => subscribers.delete(fn);
 }
 
 window.addEventListener('popstate', () => {
-  currentPath = stripBase(window.location.pathname);
-  listeners.forEach(fn => fn(currentPath));
+  subscribers.forEach(fn => fn(getPath()));
 });
