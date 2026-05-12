@@ -235,7 +235,7 @@
         </div>
         <div class="settings__about-row">
           <span>Repository</span>
-          <a href="https://github.com/anomalyco/opencode" target="_blank" rel="noopener noreferrer">github.com/anomalyco/opencode</a>
+          <a href="https://github.com/timothysagwe/AgileFocus" target="_blank" rel="noopener noreferrer">github.com/timothysagwe/AgileFocus</a>
         </div>
         <div class="settings__about-row">
           <span>Attribution</span>

@@ -7,7 +7,7 @@
 
 **Learn IT Project Management and Business Analysis in Agile — built for regulated environments.**
 
-[![GitHub Pages](https://img.shields.io/badge/hosted-GitHub%20Pages-blue?logo=github)](https://opencode.ai)
+[![GitHub Pages](https://img.shields.io/badge/hosted-GitHub%20Pages-blue?logo=github)](https://timothysagwe.github.io/AgileFocus)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Contributions Welcome](https://img.shields.io/badge/PRs-welcome-amber)](CONTRIBUTING.md)
 
@@ -48,7 +48,7 @@ AgileFocus is a **free, open-source learning sandbox** for IT Project Management
 
 ## Getting Started
 
-**[Visit the Sandbox →](https://opencode.ai)**
+**[Visit the Sandbox →](https://timothysagwe.github.io/AgileFocus)**
 
 1. No account needed — start learning immediately.
 2. Progress saves automatically in your browser (localStorage).
@@ -60,7 +60,7 @@ AgileFocus is a **free, open-source learning sandbox** for IT Project Management
 ## Running Locally
 
 ```bash
-git clone https://github.com/opencode/agilefocus.git
+git clone https://github.com/timothysagwe/AgileFocus.git
 cd agilefocus
 npm install
 npm run dev

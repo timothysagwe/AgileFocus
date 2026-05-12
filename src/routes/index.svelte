@@ -14,7 +14,7 @@
     { id: 'gov', title: 'Regulated Agile Governance', desc: '6 modules covering CAB integration, Definition of Done, traceability, release management, evidence packs, and DORA — all with hands-on exercises.', cta: 'Learn Governance', href: '/learn/governance', tier: '6 Modules', color: 'var(--color-regulatory)' },
     { id: 'personas', title: 'Stakeholder Personas', desc: '8 pre-built personas reflecting real FS and government stakeholders. Chat with them in character, or build your own using the persona builder.', cta: 'Explore Personas', href: '/personas', tier: '8 Personas', color: 'var(--color-accent-secondary)' },
     { id: 'certs', title: 'Certification Tracking', desc: 'Map your knowledge to PSM I, PMI-ACP, AgilePM, BCS BA Diploma, and GDS Standard. 100 knowledge-check questions with domain-level breakdown.', cta: 'View Certifications', href: '/learn/certifications', tier: '5 Certifications', color: 'var(--color-accent-success)' },
-    { id: 'contribute', title: 'Community Contributions', desc: 'Built by practitioners for practitioners. Contribute scenarios, personas, or exercises — no code required. Every PR is validated against JSON schemas.', cta: 'Contribute', href: 'https://github.com/opencode/agilefocus/blob/main/CONTRIBUTING.md', tier: 'Open Source', color: 'var(--color-accent-primary)' }
+    { id: 'contribute', title: 'Community Contributions', desc: 'Built by practitioners for practitioners. Contribute scenarios, personas, or exercises — no code required. Every PR is validated against JSON schemas.', cta: 'Contribute', href: 'https://github.com/timothysagwe/AgileFocus/blob/main/CONTRIBUTING.md', tier: 'Open Source', color: 'var(--color-accent-primary)' }
   ];
 
   const certifications = [
@@ -135,10 +135,10 @@
         schemas and tested before review.
       </p>
       <div class="contribute__actions">
-        <a href="https://github.com/opencode/agilefocus/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">
+        <a href="https://github.com/timothysagwe/AgileFocus/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">
           <Button variant="primary" size="md">Read the Contribution Guide</Button>
         </a>
-        <a href="https://github.com/opencode/agilefocus" target="_blank" rel="noopener noreferrer">
+        <a href="https://github.com/timothysagwe/AgileFocus" target="_blank" rel="noopener noreferrer">
           <Button variant="ghost" size="md">View on GitHub</Button>
         </a>
       </div>
@@ -149,7 +149,7 @@
   <footer class="footer">
     <div class="footer__content">
       <span class="footer__license">MIT License</span>
-      <a href="https://github.com/opencode/agilefocus" target="_blank" rel="noopener noreferrer" class="footer__link">GitHub</a>
+      <a href="https://github.com/timothysagwe/AgileFocus" target="_blank" rel="noopener noreferrer" class="footer__link">GitHub</a>
       <span class="footer__tech">Built with Svelte &amp; bpmn-js</span>
       <span class="footer__privacy">No analytics &middot; No cookies &middot; No tracking</span>
     </div>
