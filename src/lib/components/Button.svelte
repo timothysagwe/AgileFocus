@@ -35,7 +35,7 @@
     {/if}
   </a>
 {:else}
-  <button class={classes} {disabled} aria-busy={loading}>
+  <button class={classes} {disabled} aria-busy={loading} on:click>
     {#if loading}
       <span class="btn__dots"><span>.</span><span>.</span><span>.</span></span>
     {:else}
