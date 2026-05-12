@@ -33,6 +33,9 @@
   }
 
   function completePhase() {
+    if (!p.started) {
+      project.startProject(role);
+    }
     const requiredMet = stakeholderOptions.filter(s => s.required).every(s => stakeholders.includes(s.id));
     const stakeholderCoverage = stakeholders.length >= 4 ? 90 : stakeholders.length >= 3 ? 70 : 40;
     const scopeQuality = Math.min(100, scopeStatement.length * 2);

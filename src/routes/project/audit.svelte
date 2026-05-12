@@ -13,8 +13,8 @@
   $: p = $project;
   $: completed = p.completed_phases?.includes('audit');
   $: canSubmit = auditResponses.length > 20 && findingsIdentified.length > 10;
-  $: phaseState = project.getPhaseState('audit');
-  $: crossState = phaseState.crossPhaseState;
+  $: crossState = p.cross_phase_state || {};
+  $: trust = p.stakeholder_trust || {};
 
   function completePhase() {
     const evidenceQuality = evidenceReady ? 80 : 30;
@@ -26,11 +26,11 @@
       evidence_quality: evidenceQuality,
       compliance_demonstration: complianceScore,
       findings_resolution: Math.min(100, findingsCount * 15),
-      stakeholder_testimony: phaseState.trust.internal_auditor || 40,
+      stakeholder_testimony: trust.internal_auditor || 40,
       findings_count: findingsCount,
       compliance_breaches: breaches,
-      overall_score: Math.round((evidenceQuality * 0.3 + complianceScore * 0.3 + Math.min(100, findingsCount * 15) * 0.25 + (phaseState.trust.internal_auditor || 40) * 0.15)),
-      percentage: Math.round((evidenceQuality * 0.3 + complianceScore * 0.3 + Math.min(100, findingsCount * 15) * 0.25 + (phaseState.trust.internal_auditor || 40) * 0.15))
+      overall_score: Math.round((evidenceQuality * 0.3 + complianceScore * 0.3 + Math.min(100, findingsCount * 15) * 0.25 + (trust.internal_auditor || 40) * 0.15)),
+      percentage: Math.round((evidenceQuality * 0.3 + complianceScore * 0.3 + Math.min(100, findingsCount * 15) * 0.25 + (trust.internal_auditor || 40) * 0.15))
     }, {
       audit_responses: auditResponses.split('\n').filter(r => r.trim()),
       findings: findingsIdentified.split('\n').filter(f => f.trim()),

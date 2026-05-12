@@ -13,8 +13,7 @@
   $: sprintCount = simCompleted ? 6 : 0;
   $: avgScore = 65;
   $: deliveryScore = Math.round((avgScore * 0.5 + (simCompleted ? 80 : 0) * 0.5));
-  $: phaseState = project.getPhaseState('delivery');
-  $: crossState = phaseState.crossPhaseState;
+  $: crossState = p.cross_phase_state || {};
 
   function goToSimulator() {
     navigate('/simulator');
@@ -26,13 +25,13 @@
       average_sprint_score: avgScore,
       delivery_consistency: score,
       regulatory_compliance: crossState.evidence_pack_status === 'complete' ? 80 : 50,
-      stakeholder_trust: phaseState.trust,
+      stakeholder_trust: p.stakeholder_trust || {},
       evidence_pack_status: crossState.evidence_pack_status || 'none',
       dod_choice: crossState.dod_choice,
       overall_score: score,
       percentage: score,
       budget_variance: 0,
-      decisions_made: phaseState.decisionLog || []
+      decisions_made: p.decision_log || []
     });
     navigate('/project');
   }

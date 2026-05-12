@@ -1,24 +1,28 @@
 <script>
-  import { onMount } from 'svelte';
   import { navigate } from '../../lib/router.js';
   import { project, phaseList } from '../../lib/stores/project.js';
   import { progress } from '../../lib/stores/progress.js';
+  import { LifecycleEngine } from '../../lib/engines/lifecycle-engine.js';
   import Button from '../../lib/components/Button.svelte';
   import Badge from '../../lib/components/Badge.svelte';
   import Card from '../../lib/components/Card.svelte';
 
   let lessonsLearned = '';
   let portfolioGenerated = false;
-  let finalScore = null;
 
   $: p = $project;
   $: phases = $phaseList;
   $: completed = p.completed_phases?.includes('retrospective');
   $: allPhasesComplete = p.completed_phases?.length >= 6;
 
-  onMount(() => {
-    const engine = project.getEngine();
-    finalScore = engine.calculateFinalScore();
+  function getScore() {
+    const eng = new LifecycleEngine({ ...p });
+    return eng.calculateFinalScore();
+  }
+
+  $: finalScore = getScore();
+
+  function completeRetrospective() {
     if (!p.is_complete) {
       project.completePhase('retrospective', {
         completion_rate: allPhasesComplete ? 100 : Math.round((p.completed_phases?.length || 0) / 7 * 100),
@@ -27,10 +31,6 @@
         percentage: finalScore.finalPercentage
       });
     }
-  });
-
-  $: if (finalScore) {
-    finalScore = project.getEngine().calculateFinalScore();
   }
 
   function downloadPortfolio() {
@@ -149,9 +149,14 @@
     </div>
 
     <div class="phase__actions">
-      <Button variant="secondary" on:click={downloadPortfolio}>
-        {portfolioGenerated ? 'Download Again' : 'Download Portfolio'}
-      </Button>
+      <div class="phase__actions-left">
+        <Button variant="secondary" on:click={downloadPortfolio}>
+          {portfolioGenerated ? 'Download Again' : 'Download Portfolio'}
+        </Button>
+        {#if !p.is_complete}
+          <Button variant="primary" on:click={completeRetrospective}>Complete Retrospective</Button>
+        {/if}
+      </div>
       <Button variant="ghost" on:click={resetProject}>Start New Project</Button>
     </div>
   </div>
@@ -203,5 +208,6 @@
   .phase__artefact-list { display: flex; flex-direction: column; gap: var(--space-2); }
   .phase__artefact-item { display: flex; align-items: center; justify-content: space-between; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-size: var(--text-sm); }
   .phase__artefact-phase { text-transform: capitalize; }
-  .phase__actions { display: flex; justify-content: space-between; padding-top: var(--space-4); }
+  .phase__actions { display: flex; justify-content: space-between; padding-top: var(--space-4); gap: var(--space-3); }
+  .phase__actions-left { display: flex; gap: var(--space-3); }
 </style>
